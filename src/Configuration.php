@@ -108,7 +108,7 @@ class Configuration
      *
      * @param string $apiKeyIdentifier API key identifier (authentication scheme)
      *
-     * @return string API key or token
+     * @return string|null API key or token
      */
     public function getApiKey($apiKeyIdentifier)
     {
@@ -134,7 +134,7 @@ class Configuration
      *
      * @param string $apiKeyIdentifier API key identifier (authentication scheme)
      *
-     * @return string
+     * @return string|null
      */
     public function getApiKeyPrefix($apiKeyIdentifier)
     {
@@ -377,7 +377,7 @@ class Configuration
      *
      * @param  string $apiKeyIdentifier name of apikey
      *
-     * @return string API key with the prefix
+     * @return string|null API key with the prefix
      */
     public function getApiKeyWithPrefix($apiKeyIdentifier)
     {

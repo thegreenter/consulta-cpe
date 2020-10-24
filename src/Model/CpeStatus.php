@@ -34,7 +34,7 @@ class CpeStatus implements ModelInterface, ArrayAccess
     /**
       * Array of property to format mappings. Used for (de)serialization
       *
-      * @var string[]
+      * @var array<string, null>
       */
     protected static $openAPIFormats = [
         'estado_cp' => null,
@@ -312,7 +312,7 @@ class CpeStatus implements ModelInterface, ArrayAccess
     /**
      * Sets value based on offset.
      *
-     * @param integer $offset Offset
+     * @param integer|null $offset Offset
      * @param mixed   $value  Value to be set
      *
      * @return void

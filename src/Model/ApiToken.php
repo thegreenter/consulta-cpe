@@ -33,7 +33,7 @@ class ApiToken implements ModelInterface, ArrayAccess
     /**
       * Array of property to format mappings. Used for (de)serialization
       *
-      * @var string[]
+      * @var array<string, string|null>
       */
     protected static $openAPIFormats = [
         'access_token' => null,
@@ -282,7 +282,7 @@ class ApiToken implements ModelInterface, ArrayAccess
     /**
      * Sets value based on offset.
      *
-     * @param integer $offset Offset
+     * @param integer|null $offset Offset
      * @param mixed   $value  Value to be set
      *
      * @return void

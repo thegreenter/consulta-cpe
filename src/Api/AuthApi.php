@@ -7,7 +7,6 @@ use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Promise\PromiseInterface;
-use GuzzleHttp\Psr7\MultipartStream;
 use GuzzleHttp\Psr7\Query;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\RequestOptions;
@@ -64,11 +63,11 @@ class AuthApi
     /**
      * Set the host index
      *
-     * @param  int Host index (required)
+     * @param int $hostIndex index (required)
      */
-    public function setHostIndex($host_index)
+    public function setHostIndex(int $hostIndex)
     {
-        $this->hostIndex = $host_index;
+        $this->hostIndex = $hostIndex;
     }
 
     /**
@@ -121,7 +120,7 @@ class AuthApi
      * @throws ApiException on non-2xx response
      * @throws InvalidArgumentException
      *
-     * @return ApiToken[]
+     * @return array
      */
     public function getTokenWithHttpInfo($grant_type, $scope, $client_id, $client_secret)
     {
@@ -158,11 +157,7 @@ class AuthApi
             $responseBody = $response->getBody();
             switch($statusCode) {
                 case 200:
-                    if ('\Greenter\Sunat\ConsultaCpe\Model\ApiToken' === '\SplFileObject') {
-                        $content = $responseBody; //stream goes to serializer
-                    } else {
-                        $content = (string) $responseBody;
-                    }
+                    $content = (string) $responseBody;
 
                     return [
                         ObjectSerializer::deserialize($content, '\Greenter\Sunat\ConsultaCpe\Model\ApiToken', []),
@@ -173,11 +168,7 @@ class AuthApi
 
             $returnType = '\Greenter\Sunat\ConsultaCpe\Model\ApiToken';
             $responseBody = $response->getBody();
-            if ($returnType === '\SplFileObject') {
-                $content = $responseBody; //stream goes to serializer
-            } else {
-                $content = (string) $responseBody;
-            }
+            $content = (string) $responseBody;
 
             return [
                 ObjectSerializer::deserialize($content, $returnType, []),
@@ -246,11 +237,7 @@ class AuthApi
             ->then(
                 function ($response) use ($returnType) {
                     $responseBody = $response->getBody();
-                    if ($returnType === '\SplFileObject') {
-                        $content = $responseBody; //stream goes to serializer
-                    } else {
-                        $content = (string) $responseBody;
-                    }
+                    $content = (string) $responseBody;
 
                     return [
                         ObjectSerializer::deserialize($content, $returnType, []),
@@ -278,42 +265,36 @@ class AuthApi
     /**
      * Create request for operation 'getToken'
      *
-     * @param  string $grant_type (required)
-     * @param  string $scope (required)
-     * @param  string $client_id client_id generado en menú sol (required)
-     * @param  string $client_secret client_secret generado en menú sol (required)
+     * @param  string|null $grant_type (required)
+     * @param  string|null $scope (required)
+     * @param  string|null $client_id client_id generado en menú sol (required)
+     * @param  string|null $client_secret client_secret generado en menú sol (required)
      *
      * @throws InvalidArgumentException
      * @return Request
      */
-    protected function getTokenRequest($grant_type, $scope, $client_id, $client_secret)
+    protected function getTokenRequest(?string $grant_type, ?string $scope, ?string $client_id, ?string $client_secret)
     {
-        // verify the required parameter 'client_id' is set
-        if ($client_id === null || (is_array($client_id) && count($client_id) === 0)) {
-            throw new InvalidArgumentException(
-                'Missing the required parameter $client_id when calling getToken'
-            );
-        }
         // verify the required parameter 'grant_type' is set
-        if ($grant_type === null || (is_array($grant_type) && count($grant_type) === 0)) {
+        if ($grant_type === null) {
             throw new InvalidArgumentException(
                 'Missing the required parameter $grant_type when calling getToken'
             );
         }
         // verify the required parameter 'scope' is set
-        if ($scope === null || (is_array($scope) && count($scope) === 0)) {
+        if ($scope === null) {
             throw new InvalidArgumentException(
                 'Missing the required parameter $scope when calling getToken'
             );
         }
         // verify the required parameter 'client_id' is set
-        if ($client_id === null || (is_array($client_id) && count($client_id) === 0)) {
+        if ($client_id === null) {
             throw new InvalidArgumentException(
                 'Missing the required parameter $client_id when calling getToken'
             );
         }
         // verify the required parameter 'client_secret' is set
-        if ($client_secret === null || (is_array($client_secret) && count($client_secret) === 0)) {
+        if ($client_secret === null) {
             throw new InvalidArgumentException(
                 'Missing the required parameter $client_secret when calling getToken'
             );
@@ -323,10 +304,6 @@ class AuthApi
         $formParams = [];
         $queryParams = [];
         $headerParams = [];
-        $httpBody = '';
-        $multipart = false;
-
-
 
         // path params
         if ($client_id !== null) {
@@ -338,62 +315,24 @@ class AuthApi
         }
 
         // form params
-        if ($grant_type !== null) {
-            $formParams['grant_type'] = ObjectSerializer::toFormValue($grant_type);
-        }
-        // form params
-        if ($scope !== null) {
-            $formParams['scope'] = ObjectSerializer::toFormValue($scope);
-        }
-        // form params
-        if ($client_id !== null) {
-            $formParams['client_id'] = ObjectSerializer::toFormValue($client_id);
-        }
-        // form params
-        if ($client_secret !== null) {
-            $formParams['client_secret'] = ObjectSerializer::toFormValue($client_secret);
-        }
-        // body params
-        $_tempBody = null;
+        $formParams['grant_type'] = ObjectSerializer::toFormValue($grant_type);
+        $formParams['scope'] = ObjectSerializer::toFormValue($scope);
+        $formParams['client_id'] = ObjectSerializer::toFormValue($client_id);
+        $formParams['client_secret'] = ObjectSerializer::toFormValue($client_secret);
 
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                ['application/json']
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                ['application/json'],
-                ['application/x-www-form-urlencoded']
-            );
-        }
+        // body params
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json'],
+            ['application/x-www-form-urlencoded']
+        );
 
         // for model (json/xml)
-        if (isset($_tempBody)) {
-            // $_tempBody is the method argument, if present
-            if ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode(ObjectSerializer::sanitizeForSerialization($_tempBody));
-            } else {
-                $httpBody = $_tempBody;
-            }
-        } elseif (count($formParams) > 0) {
-            if ($multipart) {
-                $multipartContents = [];
-                foreach ($formParams as $formParamName => $formParamValue) {
-                    $multipartContents[] = [
-                        'name' => $formParamName,
-                        'contents' => $formParamValue
-                    ];
-                }
-                // for HTTP post (form)
-                $httpBody = new MultipartStream($multipartContents);
+        if ($headers['Content-Type'] === 'application/json') {
+            $httpBody = \GuzzleHttp\json_encode($formParams);
 
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
-            } else {
-                // for HTTP post (form)
-                $httpBody = Query::build($formParams);
-            }
+        } else {
+            // for HTTP post (form)
+            $httpBody = Query::build($formParams);
         }
 
 

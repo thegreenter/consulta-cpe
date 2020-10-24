@@ -8,7 +8,6 @@ use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Promise\PromiseInterface;
-use GuzzleHttp\Psr7\MultipartStream;
 use GuzzleHttp\Psr7\Query;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\RequestOptions;
@@ -65,11 +64,11 @@ class ConsultaApi
     /**
      * Set the host index
      *
-     * @param  int Host index (required)
+     * @param int $hostIndex index (required)
      */
-    public function setHostIndex($host_index)
+    public function setHostIndex(int $hostIndex)
     {
-        $this->hostIndex = $host_index;
+        $this->hostIndex = $hostIndex;
     }
 
     /**
@@ -95,14 +94,14 @@ class ConsultaApi
      *
      * Consulta de comprobante
      *
-     * @param  string $ruc RUC de quién realiza la consulta (required)
-     * @param  CpeFilter $cpe_filter cpe_filter (optional)
+     * @param string|null $ruc RUC de quién realiza la consulta (required)
+     * @param CpeFilter|null $cpe_filter cpe_filter (optional)
      *
      * @return CpeResponse
      *@throws InvalidArgumentException
      * @throws ApiException on non-2xx response
      */
-    public function consultarCpe($ruc, $cpe_filter = null)
+    public function consultarCpe(?string $ruc, ?CpeFilter $cpe_filter = null)
     {
         list($response) = $this->consultarCpeWithHttpInfo($ruc, $cpe_filter);
         return $response;
@@ -113,14 +112,14 @@ class ConsultaApi
      *
      * Consulta de comprobante
      *
-     * @param  string $ruc RUC de quién realiza la consulta (required)
-     * @param  CpeFilter $cpe_filter (optional)
+     * @param  string|null $ruc RUC de quién realiza la consulta (required)
+     * @param  CpeFilter|null $cpe_filter (optional)
      *
-     * @return CpeResponse[]
+     * @return array
      *
      * @throws InvalidArgumentException|ApiException
      */
-    public function consultarCpeWithHttpInfo($ruc, $cpe_filter = null)
+    public function consultarCpeWithHttpInfo(?string $ruc, ?CpeFilter $cpe_filter = null)
     {
         $request = $this->consultarCpeRequest($ruc, $cpe_filter);
 
@@ -155,11 +154,7 @@ class ConsultaApi
             $responseBody = $response->getBody();
             switch($statusCode) {
                 case 200:
-                    if ('\Greenter\Sunat\ConsultaCpe\Model\CpeResponse' === '\SplFileObject') {
-                        $content = $responseBody; //stream goes to serializer
-                    } else {
-                        $content = (string) $responseBody;
-                    }
+                    $content = (string) $responseBody;
 
                     return [
                         ObjectSerializer::deserialize($content, '\Greenter\Sunat\ConsultaCpe\Model\CpeResponse', []),
@@ -170,11 +165,7 @@ class ConsultaApi
 
             $returnType = '\Greenter\Sunat\ConsultaCpe\Model\CpeResponse';
             $responseBody = $response->getBody();
-            if ($returnType === '\SplFileObject') {
-                $content = $responseBody; //stream goes to serializer
-            } else {
-                $content = (string) $responseBody;
-            }
+            $content = (string) $responseBody;
 
             return [
                 ObjectSerializer::deserialize($content, $returnType, []),
@@ -239,11 +230,7 @@ class ConsultaApi
             ->then(
                 function ($response) use ($returnType) {
                     $responseBody = $response->getBody();
-                    if ($returnType === '\SplFileObject') {
-                        $content = $responseBody; //stream goes to serializer
-                    } else {
-                        $content = (string) $responseBody;
-                    }
+                    $content = (string) $responseBody;
 
                     return [
                         ObjectSerializer::deserialize($content, $returnType, []),
@@ -271,29 +258,25 @@ class ConsultaApi
     /**
      * Create request for operation 'consultarCpe'
      *
-     * @param  string $ruc RUC de quién realiza la consulta (required)
-     * @param  CpeFilter $cpe_filter (optional)
+     * @param  string|null $ruc RUC de quién realiza la consulta (required)
+     * @param  CpeFilter|null $cpe_filter (optional)
      *
      * @throws InvalidArgumentException
      * @return Request
      */
-    protected function consultarCpeRequest($ruc, $cpe_filter = null)
+    protected function consultarCpeRequest(?string $ruc, ?CpeFilter $cpe_filter = null)
     {
         // verify the required parameter 'ruc' is set
-        if ($ruc === null || (is_array($ruc) && count($ruc) === 0)) {
+        if ($ruc === null) {
             throw new InvalidArgumentException(
                 'Missing the required parameter $ruc when calling consultarCpe'
             );
         }
 
         $resourcePath = '/contribuyente/contribuyentes/{ruc}/validarcomprobante';
-        $formParams = [];
         $queryParams = [];
         $headerParams = [];
         $httpBody = '';
-        $multipart = false;
-
-
 
         // path params
         if ($ruc !== null) {
@@ -310,16 +293,10 @@ class ConsultaApi
             $_tempBody = $cpe_filter;
         }
 
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                ['application/json']
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                ['application/json'],
-                ['application/json']
-            );
-        }
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json'],
+            ['application/json']
+        );
 
         // for model (json/xml)
         if (isset($_tempBody)) {
@@ -328,25 +305,6 @@ class ConsultaApi
                 $httpBody = \GuzzleHttp\json_encode(ObjectSerializer::sanitizeForSerialization($_tempBody));
             } else {
                 $httpBody = $_tempBody;
-            }
-        } elseif (count($formParams) > 0) {
-            if ($multipart) {
-                $multipartContents = [];
-                foreach ($formParams as $formParamName => $formParamValue) {
-                    $multipartContents[] = [
-                        'name' => $formParamName,
-                        'contents' => $formParamValue
-                    ];
-                }
-                // for HTTP post (form)
-                $httpBody = new MultipartStream($multipartContents);
-
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
-            } else {
-                // for HTTP post (form)
-                $httpBody = Query::build($formParams);
             }
         }
 

@@ -2,3 +2,5 @@ parameters:
     level: 5
     paths:
     - src
+    ignoreErrors:
+    - '#Parameter \#3 \$responseHeaders of class Greenter\\Sunat\\ConsultaCpe\\ApiException constructor expects array<string>\|null\, array<array<string>>(\|null)? given\.#'
