@@ -7,14 +7,17 @@
          stopOnFailure="false">
     <testsuites>
         <testsuite name="tests">
-            <directory>./test/Api</directory>
-            <directory>./test/Model</directory>
+            <directory>./tests</directory>
         </testsuite>
     </testsuites>
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">./src/Api</directory>
             <directory suffix=".php">./src/Model</directory>
+            <exclude>
+                <directory>./tests</directory>
+                <directory>./vendor</directory>
+            </exclude>
         </whitelist>
     </filter>
     <php>
