@@ -29,6 +29,6 @@
         "psr-4": { "Greenter\\Sunat\\ConsultaCpe\\" : "src/" }
     },
     "autoload-dev": {
-        "psr-4": { "Greenter\\Sunat\\ConsultaCpe\\" : "test/" }
+        "psr-4": { "Tests\\Greenter\\Sunat\\ConsultaCpe\\" : "test/" }
     }
 }
