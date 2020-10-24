@@ -58,7 +58,7 @@ class Configuration
      *
      * @var string
      */
-    protected $userAgent = 'OpenAPI-Generator/1.0.0/PHP';
+    protected $userAgent = 'Greenter consulta-cpe PHP';
 
     /**
      * Debug switch (default set to false)
