@@ -32,7 +32,7 @@ $apiInstance = new \Greenter\Sunat\ConsultaCpe\Api\ConsultaApi(
     $config
 );
 $ruc = 'ruc_example'; // string | RUC de quién realiza la consulta
-$cpe_filter = new \Greenter\Sunat\ConsultaCpe\Model\CpeFilter(); // \OpenAPI\Client\Model\CpeFilter | 
+$cpe_filter = new \Greenter\Sunat\ConsultaCpe\Model\CpeFilter(); 
 
 try {
     $result = $apiInstance->consultarCpe($ruc, $cpe_filter);
