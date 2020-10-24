@@ -1,0 +1,33 @@
+{
+    "name": "greenter/consulta-cpe",
+    "description": "PHP Client de Consulta Integrada de Comprobante de Pago - SUNAT.",
+    "keywords": [
+        "sunat",
+        "facturacion-electronica",
+        "Greenter\Sunat\ConsultaCpe"
+    ],
+    "homepage": "https://github.com/thegreenter/consulta-cpe",
+    "license": "unlicense",
+    "authors": [
+        {
+            "name": "Greenter",
+            "homepage": "https://greenter.dev"
+        }
+    ],
+    "require": {
+        "php": ">=7.1",
+        "ext-curl": "*",
+        "ext-json": "*",
+        "ext-mbstring": "*",
+        "guzzlehttp/guzzle": "^6.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.4"
+    },
+    "autoload": {
+        "psr-4": { "Greenter\\Sunat\\ConsultaCpe\\" : "src/" }
+    },
+    "autoload-dev": {
+        "psr-4": { "Greenter\\Sunat\\ConsultaCpe\\" : "test/" }
+    }
+}
