@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 class ConsultaApiTest extends TestCase
 {
     /**
-     * Setup before running each test case
+     * Setup before running each tests case
      */
     public function setUp()
     {
