@@ -420,15 +420,10 @@ class Configuration
      * Returns URL based on the index and variables
      *
      * @param int $index index of the host settings
-     * @param array $variables of variable and the corresponding value (optional)
      * @return string based on host settings
      */
-    public function getHostFromSettings($index, $variables = null)
+    public function getHostFromSettings($index)
     {
-        if (null === $variables) {
-            $variables = array();
-        }
-
         $hosts = $this->getHostSettings();
 
         // check array index out of bound
@@ -437,22 +432,6 @@ class Configuration
         }
 
         $host = $hosts[$index];
-        $url = $host["url"];
-
-        // go through variable and assign a value
-        foreach ($host["variables"] as $name => $variable) {
-            if (array_key_exists($name, $variables)) { // check to see if it's in the variables provided by the user
-                if (in_array($variables[$name], $variable["enum_values"])) { // check to see if the value is in the enum
-                    $url = str_replace("{".$name."}", $variables[$name], $url);
-                } else {
-                    throw new InvalidArgumentException("The variable `$name` in the host URL has invalid value ".$variables[$name].". Must be ".join(',', $variable["enum_values"]).".");
-                }
-            } else {
-                // use default value
-                $url = str_replace("{".$name."}", $variable["default_value"], $url);
-            }
-        }
-
-        return $url;
+        return $host["url"];
     }
 }

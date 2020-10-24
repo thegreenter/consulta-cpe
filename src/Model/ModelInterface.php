@@ -31,9 +31,6 @@ namespace Greenter\Sunat\ConsultaCpe\Model;
 
 /**
  * Interface abstracting model access.
- *
- * @package OpenAPI\Client\Model
- * @author  OpenAPI Generator team
  */
 interface ModelInterface
 {

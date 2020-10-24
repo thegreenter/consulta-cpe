@@ -27,7 +27,7 @@ class CpeResponse implements ModelInterface, ArrayAccess
     protected static $openAPITypes = [
         'success' => 'bool',
         'message' => 'string',
-        'data' => '\OpenAPI\Client\Model\CpeStatus',
+        'data' => '\Greenter\Sunat\ConsultaCpe\Model\CpeStatus',
         'error_code' => 'string'
     ];
 
@@ -140,10 +140,6 @@ class CpeResponse implements ModelInterface, ArrayAccess
     {
         return self::$openAPIModelName;
     }
-
-    
-
-    
 
     /**
      * Associative array for storing property values
