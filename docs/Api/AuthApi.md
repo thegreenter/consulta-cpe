@@ -21,10 +21,10 @@ Generar un nuevo token
 require_once(__DIR__ . '/vendor/autoload.php');
 
 
-$apiInstance = new Greenter\Sunat\ConsultaCpe\Api\AuthApi(
+$apiInstance = new \Greenter\Sunat\ConsultaCpe\Api\AuthApi(
     // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
     // This is optional, `GuzzleHttp\Client` will be used as default.
-    new GuzzleHttp\Client()
+    new \GuzzleHttp\Client()
 );
 
 $grant_type = 'client_credentials'; // string | 

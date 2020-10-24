@@ -22,17 +22,17 @@ require_once(__DIR__ . '/vendor/autoload.php');
 
 
 // Configure Bearer authorization: sunat_auth
-$config = Greenter\Sunat\ConsultaCpe\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
+$config = \Greenter\Sunat\ConsultaCpe\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
 
-$apiInstance = new Greenter\Sunat\ConsultaCpe\Api\ConsultaApi(
+$apiInstance = new \Greenter\Sunat\ConsultaCpe\Api\ConsultaApi(
     // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
     // This is optional, `GuzzleHttp\Client` will be used as default.
     new GuzzleHttp\Client(),
     $config
 );
 $ruc = 'ruc_example'; // string | RUC de quién realiza la consulta
-$cpe_filter = new Greenter\Sunat\ConsultaCpe\Model\CpeFilter(); // \OpenAPI\Client\Model\CpeFilter | 
+$cpe_filter = new \Greenter\Sunat\ConsultaCpe\Model\CpeFilter(); // \OpenAPI\Client\Model\CpeFilter | 
 
 try {
     $result = $apiInstance->consultarCpe($ruc, $cpe_filter);
