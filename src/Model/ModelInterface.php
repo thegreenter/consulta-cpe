@@ -27,7 +27,7 @@
  * Do not edit the class manually.
  */
 
-namespace OpenAPI\Client\Model;
+namespace Greenter\Sunat\ConsultaCpe\Model;
 
 /**
  * Interface abstracting model access.
