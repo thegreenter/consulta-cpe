@@ -2,6 +2,8 @@
 
 namespace Greenter\Sunat\ConsultaCpe\Api;
 
+use Greenter\Sunat\ConsultaCpe\Model\CpeFilter;
+use Greenter\Sunat\ConsultaCpe\Model\CpeResponse;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
@@ -12,6 +14,8 @@ use Greenter\Sunat\ConsultaCpe\ApiException;
 use Greenter\Sunat\ConsultaCpe\Configuration;
 use Greenter\Sunat\ConsultaCpe\HeaderSelector;
 use Greenter\Sunat\ConsultaCpe\ObjectSerializer;
+use InvalidArgumentException;
+use RuntimeException;
 
 /**
  * ConsultaApi Class
@@ -69,7 +73,7 @@ class ConsultaApi
     /**
      * Get the host index
      *
-     * @return Host index
+     * @return int
      */
     public function getHostIndex()
     {
@@ -90,11 +94,11 @@ class ConsultaApi
      * Consulta de comprobante
      *
      * @param  string $ruc RUC de quién realiza la consulta (required)
-     * @param  \Greenter\Sunat\ConsultaCpe\Model\CpeFilter $cpe_filter cpe_filter (optional)
+     * @param  CpeFilter $cpe_filter cpe_filter (optional)
      *
-     * @throws \Greenter\Sunat\ConsultaCpe\ApiException on non-2xx response
-     * @throws \InvalidArgumentException
      * @return \Greenter\Sunat\ConsultaCpe\Model\CpeResponse
+     *@throws InvalidArgumentException
+     * @throws ApiException on non-2xx response
      */
     public function consultarCpe($ruc, $cpe_filter = null)
     {
@@ -108,11 +112,11 @@ class ConsultaApi
      * Consulta de comprobante
      *
      * @param  string $ruc RUC de quién realiza la consulta (required)
-     * @param  \Greenter\Sunat\ConsultaCpe\Model\CpeFilter $cpe_filter (optional)
+     * @param  CpeFilter $cpe_filter (optional)
      *
-     * @throws \Greenter\Sunat\ConsultaCpe\ApiException on non-2xx response
-     * @throws \InvalidArgumentException
-     * @return array of \Greenter\Sunat\ConsultaCpe\Model\CpeResponse, HTTP status code, HTTP response headers (array of strings)
+     * @return CpeResponse[]
+     *
+     * @throws InvalidArgumentException|ApiException
      */
     public function consultarCpeWithHttpInfo($ruc, $cpe_filter = null)
     {
@@ -197,9 +201,9 @@ class ConsultaApi
      * Consulta de comprobante
      *
      * @param  string $ruc RUC de quién realiza la consulta (required)
-     * @param  \Greenter\Sunat\ConsultaCpe\Model\CpeFilter $cpe_filter (optional)
+     * @param  CpeFilter $cpe_filter (optional)
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function consultarCpeAsync($ruc, $cpe_filter = null)
@@ -218,9 +222,9 @@ class ConsultaApi
      * Consulta de comprobante
      *
      * @param  string $ruc RUC de quién realiza la consulta (required)
-     * @param  \Greenter\Sunat\ConsultaCpe\Model\CpeFilter $cpe_filter (optional)
+     * @param  CpeFilter $cpe_filter (optional)
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function consultarCpeAsyncWithHttpInfo($ruc, $cpe_filter = null)
@@ -266,16 +270,16 @@ class ConsultaApi
      * Create request for operation 'consultarCpe'
      *
      * @param  string $ruc RUC de quién realiza la consulta (required)
-     * @param  \Greenter\Sunat\ConsultaCpe\Model\CpeFilter $cpe_filter (optional)
+     * @param  CpeFilter $cpe_filter (optional)
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
     protected function consultarCpeRequest($ruc, $cpe_filter = null)
     {
         // verify the required parameter 'ruc' is set
         if ($ruc === null || (is_array($ruc) && count($ruc) === 0)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Missing the required parameter $ruc when calling consultarCpe'
             );
         }
@@ -372,7 +376,7 @@ class ConsultaApi
     /**
      * Create http client option
      *
-     * @throws \RuntimeException on file opening failure
+     * @throws RuntimeException on file opening failure
      * @return array of http client options
      */
     protected function createHttpClientOption()
@@ -381,7 +385,7 @@ class ConsultaApi
         if ($this->config->getDebug()) {
             $options[RequestOptions::DEBUG] = fopen($this->config->getDebugFile(), 'a');
             if (!$options[RequestOptions::DEBUG]) {
-                throw new \RuntimeException('Failed to open the debug file: ' . $this->config->getDebugFile());
+                throw new RuntimeException('Failed to open the debug file: ' . $this->config->getDebugFile());
             }
         }
 

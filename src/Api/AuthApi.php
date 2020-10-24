@@ -2,6 +2,7 @@
 
 namespace Greenter\Sunat\ConsultaCpe\Api;
 
+use Greenter\Sunat\ConsultaCpe\Model\ApiToken;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
@@ -12,6 +13,8 @@ use Greenter\Sunat\ConsultaCpe\ApiException;
 use Greenter\Sunat\ConsultaCpe\Configuration;
 use Greenter\Sunat\ConsultaCpe\HeaderSelector;
 use Greenter\Sunat\ConsultaCpe\ObjectSerializer;
+use InvalidArgumentException;
+use RuntimeException;
 
 /**
  * AuthApi Class
@@ -69,7 +72,7 @@ class AuthApi
     /**
      * Get the host index
      *
-     * @return Host index
+     * @return int
      */
     public function getHostIndex()
     {
@@ -89,19 +92,17 @@ class AuthApi
      *
      * Generar un nuevo token
      *
-     * @param  string $client_id El client_id generado en menú sol (required)
      * @param  string $grant_type grant_type (required)
      * @param  string $scope scope (required)
      * @param  string $client_id client_id generado en menú sol (required)
      * @param  string $client_secret client_secret generado en menú sol (required)
      *
-     * @throws \OpenAPI\Client\ApiException on non-2xx response
-     * @throws \InvalidArgumentException
-     * @return \OpenAPI\Client\Model\ApiToken
+     * @return ApiToken
+     * @throws InvalidArgumentException|ApiException
      */
-    public function getToken($client_id, $grant_type, $scope, $client_id, $client_secret)
+    public function getToken($grant_type, $scope, $client_id, $client_secret)
     {
-        list($response) = $this->getTokenWithHttpInfo($client_id, $grant_type, $scope, $client_id, $client_secret);
+        list($response) = $this->getTokenWithHttpInfo($grant_type, $scope, $client_id, $client_secret);
         return $response;
     }
 
@@ -110,19 +111,19 @@ class AuthApi
      *
      * Generar un nuevo token
      *
-     * @param  string $client_id El client_id generado en menú sol (required)
      * @param  string $grant_type (required)
      * @param  string $scope (required)
      * @param  string $client_id client_id generado en menú sol (required)
      * @param  string $client_secret client_secret generado en menú sol (required)
      *
-     * @throws \OpenAPI\Client\ApiException on non-2xx response
-     * @throws \InvalidArgumentException
-     * @return array of \OpenAPI\Client\Model\ApiToken, HTTP status code, HTTP response headers (array of strings)
+     * @throws ApiException on non-2xx response
+     * @throws InvalidArgumentException
+     *
+     * @return ApiToken[]
      */
-    public function getTokenWithHttpInfo($client_id, $grant_type, $scope, $client_id, $client_secret)
+    public function getTokenWithHttpInfo($grant_type, $scope, $client_id, $client_secret)
     {
-        $request = $this->getTokenRequest($client_id, $grant_type, $scope, $client_id, $client_secret);
+        $request = $this->getTokenRequest($grant_type, $scope, $client_id, $client_secret);
 
         try {
             $options = $this->createHttpClientOption();
@@ -155,20 +156,20 @@ class AuthApi
             $responseBody = $response->getBody();
             switch($statusCode) {
                 case 200:
-                    if ('\OpenAPI\Client\Model\ApiToken' === '\SplFileObject') {
+                    if ('\Greenter\Sunat\ConsultaCpe\Model\ApiToken' === '\SplFileObject') {
                         $content = $responseBody; //stream goes to serializer
                     } else {
                         $content = (string) $responseBody;
                     }
 
                     return [
-                        ObjectSerializer::deserialize($content, '\OpenAPI\Client\Model\ApiToken', []),
+                        ObjectSerializer::deserialize($content, '\Greenter\Sunat\ConsultaCpe\Model\ApiToken', []),
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
             }
 
-            $returnType = '\OpenAPI\Client\Model\ApiToken';
+            $returnType = '\Greenter\Sunat\ConsultaCpe\Model\ApiToken';
             $responseBody = $response->getBody();
             if ($returnType === '\SplFileObject') {
                 $content = $responseBody; //stream goes to serializer
@@ -187,7 +188,7 @@ class AuthApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\OpenAPI\Client\Model\ApiToken',
+                        '\Greenter\Sunat\ConsultaCpe\Model\ApiToken',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -202,18 +203,17 @@ class AuthApi
      *
      * Generar un nuevo token
      *
-     * @param  string $client_id El client_id generado en menú sol (required)
      * @param  string $grant_type (required)
      * @param  string $scope (required)
      * @param  string $client_id client_id generado en menú sol (required)
      * @param  string $client_secret client_secret generado en menú sol (required)
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getTokenAsync($client_id, $grant_type, $scope, $client_id, $client_secret)
+    public function getTokenAsync($grant_type, $scope, $client_id, $client_secret)
     {
-        return $this->getTokenAsyncWithHttpInfo($client_id, $grant_type, $scope, $client_id, $client_secret)
+        return $this->getTokenAsyncWithHttpInfo($grant_type, $scope, $client_id, $client_secret)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -226,19 +226,18 @@ class AuthApi
      *
      * Generar un nuevo token
      *
-     * @param  string $client_id El client_id generado en menú sol (required)
      * @param  string $grant_type (required)
      * @param  string $scope (required)
      * @param  string $client_id client_id generado en menú sol (required)
      * @param  string $client_secret client_secret generado en menú sol (required)
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getTokenAsyncWithHttpInfo($client_id, $grant_type, $scope, $client_id, $client_secret)
+    public function getTokenAsyncWithHttpInfo($grant_type, $scope, $client_id, $client_secret)
     {
-        $returnType = '\OpenAPI\Client\Model\ApiToken';
-        $request = $this->getTokenRequest($client_id, $grant_type, $scope, $client_id, $client_secret);
+        $returnType = '\Greenter\Sunat\ConsultaCpe\Model\ApiToken';
+        $request = $this->getTokenRequest($grant_type, $scope, $client_id, $client_secret);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -277,44 +276,43 @@ class AuthApi
     /**
      * Create request for operation 'getToken'
      *
-     * @param  string $client_id El client_id generado en menú sol (required)
      * @param  string $grant_type (required)
      * @param  string $scope (required)
      * @param  string $client_id client_id generado en menú sol (required)
      * @param  string $client_secret client_secret generado en menú sol (required)
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    protected function getTokenRequest($client_id, $grant_type, $scope, $client_id, $client_secret)
+    protected function getTokenRequest($grant_type, $scope, $client_id, $client_secret)
     {
         // verify the required parameter 'client_id' is set
         if ($client_id === null || (is_array($client_id) && count($client_id) === 0)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Missing the required parameter $client_id when calling getToken'
             );
         }
         // verify the required parameter 'grant_type' is set
         if ($grant_type === null || (is_array($grant_type) && count($grant_type) === 0)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Missing the required parameter $grant_type when calling getToken'
             );
         }
         // verify the required parameter 'scope' is set
         if ($scope === null || (is_array($scope) && count($scope) === 0)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Missing the required parameter $scope when calling getToken'
             );
         }
         // verify the required parameter 'client_id' is set
         if ($client_id === null || (is_array($client_id) && count($client_id) === 0)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Missing the required parameter $client_id when calling getToken'
             );
         }
         // verify the required parameter 'client_secret' is set
         if ($client_secret === null || (is_array($client_secret) && count($client_secret) === 0)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Missing the required parameter $client_secret when calling getToken'
             );
         }
@@ -420,7 +418,7 @@ class AuthApi
     /**
      * Create http client option
      *
-     * @throws \RuntimeException on file opening failure
+     * @throws RuntimeException on file opening failure
      * @return array of http client options
      */
     protected function createHttpClientOption()
@@ -429,7 +427,7 @@ class AuthApi
         if ($this->config->getDebug()) {
             $options[RequestOptions::DEBUG] = fopen($this->config->getDebugFile(), 'a');
             if (!$options[RequestOptions::DEBUG]) {
-                throw new \RuntimeException('Failed to open the debug file: ' . $this->config->getDebugFile());
+                throw new RuntimeException('Failed to open the debug file: ' . $this->config->getDebugFile());
             }
         }
 
