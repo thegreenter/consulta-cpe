@@ -7,7 +7,9 @@ use Greenter\Sunat\ConsultaCpe\Model\CpeResponse;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\MultipartStream;
+use GuzzleHttp\Psr7\Query;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\RequestOptions;
 use Greenter\Sunat\ConsultaCpe\ApiException;
@@ -96,7 +98,7 @@ class ConsultaApi
      * @param  string $ruc RUC de quién realiza la consulta (required)
      * @param  CpeFilter $cpe_filter cpe_filter (optional)
      *
-     * @return \Greenter\Sunat\ConsultaCpe\Model\CpeResponse
+     * @return CpeResponse
      *@throws InvalidArgumentException
      * @throws ApiException on non-2xx response
      */
@@ -204,7 +206,7 @@ class ConsultaApi
      * @param  CpeFilter $cpe_filter (optional)
      *
      * @throws InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @return PromiseInterface
      */
     public function consultarCpeAsync($ruc, $cpe_filter = null)
     {
@@ -225,7 +227,7 @@ class ConsultaApi
      * @param  CpeFilter $cpe_filter (optional)
      *
      * @throws InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @return PromiseInterface
      */
     public function consultarCpeAsyncWithHttpInfo($ruc, $cpe_filter = null)
     {
@@ -273,7 +275,7 @@ class ConsultaApi
      * @param  CpeFilter $cpe_filter (optional)
      *
      * @throws InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
+     * @return Request
      */
     protected function consultarCpeRequest($ruc, $cpe_filter = null)
     {
@@ -344,7 +346,7 @@ class ConsultaApi
 
             } else {
                 // for HTTP post (form)
-                $httpBody = \GuzzleHttp\Psr7\build_query($formParams);
+                $httpBody = Query::build($formParams);
             }
         }
 
@@ -364,7 +366,7 @@ class ConsultaApi
             $headers
         );
 
-        $query = \GuzzleHttp\Psr7\build_query($queryParams);
+        $query = Query::build($queryParams);
         return new Request(
             'POST',
             $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),

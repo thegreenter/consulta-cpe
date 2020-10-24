@@ -6,7 +6,9 @@ use Greenter\Sunat\ConsultaCpe\Model\ApiToken;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\MultipartStream;
+use GuzzleHttp\Psr7\Query;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\RequestOptions;
 use Greenter\Sunat\ConsultaCpe\ApiException;
@@ -209,7 +211,7 @@ class AuthApi
      * @param  string $client_secret client_secret generado en menú sol (required)
      *
      * @throws InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @return PromiseInterface
      */
     public function getTokenAsync($grant_type, $scope, $client_id, $client_secret)
     {
@@ -232,7 +234,7 @@ class AuthApi
      * @param  string $client_secret client_secret generado en menú sol (required)
      *
      * @throws InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @return PromiseInterface
      */
     public function getTokenAsyncWithHttpInfo($grant_type, $scope, $client_id, $client_secret)
     {
@@ -282,7 +284,7 @@ class AuthApi
      * @param  string $client_secret client_secret generado en menú sol (required)
      *
      * @throws InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
+     * @return Request
      */
     protected function getTokenRequest($grant_type, $scope, $client_id, $client_secret)
     {
@@ -390,7 +392,7 @@ class AuthApi
 
             } else {
                 // for HTTP post (form)
-                $httpBody = \GuzzleHttp\Psr7\build_query($formParams);
+                $httpBody = Query::build($formParams);
             }
         }
 
@@ -406,7 +408,7 @@ class AuthApi
             $headers
         );
 
-        $query = \GuzzleHttp\Psr7\build_query($queryParams);
+        $query = Query::build($queryParams);
         return new Request(
             'POST',
             $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
