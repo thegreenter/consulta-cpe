@@ -108,7 +108,7 @@ Tipo de comprobante
 |R1     | Recibo por honorarios      |
 |R7     | Nota de crédito de recibos |
 
-Estado del comprobante (`$data->getEstadoCp`)
+Estado del comprobante (Códigos devuelto en `$data->getEstadoCp()`)
 
 Código | Descripción                           |
 -------|---------------------------------------|
@@ -118,7 +118,7 @@ Código | Descripción                           |
 3 | AUTORIZADO (con autorización de imprenta) |
 4 | NO AUTORIZADO (no autorizado por imprenta) |
  
-Estado del contribuyente (`$data->getEstadoRuc`)
+Estado del contribuyente (Códigos devuelto en `$data->getEstadoRuc()`)
 
 Código | Descripción                           |
 -------|---------------------------------------|
@@ -130,7 +130,7 @@ Código | Descripción                           |
 11 | BAJA DE OFICIO
 22 | INHABILITADO-VENT.UNICA
 
-Condición de Domicilio del Contribuyente (`$data->getCondDomiRuc`)
+Condición de Domicilio del Contribuyente (Códigos devuelto en `$data->getCondDomiRuc()`)
 
 Código | Descripción                           |
 -------|---------------------------------------|
