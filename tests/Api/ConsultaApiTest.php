@@ -71,6 +71,6 @@ class ConsultaApiTest extends TestCase
 
         echo 'Estado RUC: '.$data->getEstadoRuc().PHP_EOL;
         echo 'Condicion RUC: '.$data->getCondDomiRuc().PHP_EOL;
-        echo 'Observaciones: '.join(',',$data->getObservaciones()).PHP_EOL;
+        echo 'Observaciones: '.(is_array($data->getObservaciones()) ? join(',', $data->getObservaciones()) : 'NINGUNO').PHP_EOL;
     }
 }
