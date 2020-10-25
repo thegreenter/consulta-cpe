@@ -7,7 +7,7 @@
         "greenter"
     ],
     "homepage": "https://github.com/thegreenter/consulta-cpe",
-    "license": "unlicense",
+    "license": "MIT",
     "authors": [
         {
             "name": "Greenter",
