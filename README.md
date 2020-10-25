@@ -38,11 +38,14 @@ $client_secret = 'client_secret_example'; // client_secret generado en menú sol
 try {
     $result = $apiInstance->getToken($grant_type, $scope, $client_id, $client_secret);
         
-    echo 'Token: '.$result->getAccessToken();
+    echo 'Token: '.$result->getAccessToken().PHP_EOL;
+    echo 'Expira: '.$result->getExpiresIn().' segundos'.PHP_EOL;
 } catch (Exception $e) {
     echo 'Excepcion cuando invocaba AuthApi->getToken: ', $e->getMessage(), PHP_EOL;
 }
 ```
+
+> No necesitas solicitar un token por cada consulta, puedes usar el mismo durante el tiempo de expiración, generalmente 3600 seg (1h).
 
 2. Consulta de CPE.
 
