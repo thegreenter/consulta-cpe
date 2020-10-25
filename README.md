@@ -2,62 +2,140 @@
 
 CONSULTA INTEGRADA DE COMPROBANTE DE PAGO.
 
-## Requirements
+## Requerimientos
 
-PHP 7.1 and later
+- PHP 7.1 o posterior
+- `curl` extension habilitado.
 
-## Installation & Usage
+## Instalación
 
-### Composer
-
-To install this package via [Composer](http://getcomposer.org/):
+Utilizando [Composer](http://getcomposer.org/):
 
 ```bash
 composer require greenter/consulta-cpe
 ```
 
-## Getting Started
+## Uso
 
-Please follow the [installation procedure](#installation--usage) and then run the following:
+Primero es necesario obtener el `client_id`, `client_secret` desde el portal de SUNAT, puedes seguir la [guía oficial](https://orientacion.sunat.gob.pe/images/imagenes/contenido/comprobantes/Manual-de-Consulta-Integrada-de-Comprobante-de-Pago-por-ServicioWEB.pdf).
+
+1. Solicitud de token.
 
 ```php
 <?php
-require_once(__DIR__ . '/vendor/autoload.php');
-
-
 
 $apiInstance = new \Greenter\Sunat\ConsultaCpe\Api\AuthApi(
-    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
-    // This is optional, `GuzzleHttp\Client` will be used as default.
     new \GuzzleHttp\Client()
 );
 
-$grant_type = 'client_credentials'; // string | 
-$scope = 'https://api.sunat.gob.pe/v1/contribuyente/contribuyentes'; // string | 
-$client_id = 'client_id_example'; // string | client_id generado en menú sol
-$client_secret = 'client_secret_example'; // string | client_secret generado en menú sol
+$grant_type = 'client_credentials'; // Constante
+$scope = 'https://api.sunat.gob.pe/v1/contribuyente/contribuyentes'; // Constante
+$client_id = 'client_id_example'; // client_id generado en menú sol
+$client_secret = 'client_secret_example'; // client_secret generado en menú sol
 
 try {
     $result = $apiInstance->getToken($grant_type, $scope, $client_id, $client_secret);
-    print_r($result);
+        
+    echo 'Token: '.$result->getAccessToken();
 } catch (Exception $e) {
-    echo 'Exception when calling AuthApi->getToken: ', $e->getMessage(), PHP_EOL;
+    echo 'Excepcion cuando invocaba AuthApi->getToken: ', $e->getMessage(), PHP_EOL;
 }
-
-?>
 ```
 
-## Documentation for API Endpoints
+2. Consulta de CPE.
 
-All URIs are relative to *https://api-seguridad.sunat.gob.pe/v1*
+```php
+<?php
 
-Class | Method | HTTP request | Description
------------- | ------------- | ------------- | -------------
-*AuthApi* | [**getToken**](docs/Api/AuthApi.md#gettoken) | **POST** /clientesextranet/{client_id}/oauth2/token/ | Generar un nuevo token
-*ConsultaApi* | [**consultarCpe**](docs/Api/ConsultaApi.md#consultarcpe) | **POST** /contribuyente/contribuyentes/{ruc}/validarcomprobante | Consulta de comprobante
+// Token generado en el ejemplo anterior
+$token = 'xxxxxxxx';
 
+$config = \Greenter\Sunat\ConsultaCpe\Configuration::getDefaultConfiguration()->setAccessToken($token);
 
-## Documentation For Models
+$apiInstance = new \Greenter\Sunat\ConsultaCpe\Api\ConsultaApi(
+    new GuzzleHttp\Client(),
+    $config->setHost($config->getHostFromSettings(1))
+);
+$ruc = '20000000001'; // RUC de quién realiza la consulta
+$cpeFilter = (new \Greenter\Sunat\ConsultaCpe\Model\CpeFilter())
+            ->setNumRuc($ruc)
+            ->setCodComp('01') // Tipo de comprobante
+            ->setNumeroSerie('F001')
+            ->setNumero('1')
+            ->setFechaEmision('20/10/2020')
+            ->setMonto('100.00');
+
+try {
+    $result = $apiInstance->consultarCpe($ruc, $cpeFilter);
+    if (!$result->getSuccess()) {
+        echo $result->getMessage();
+        return;
+    }
+
+    $data = $result->getData();
+    switch ($data->getEstadoCp()) {
+        case '0': echo 'NO EXISTE'; break;
+        case '1': echo 'ACEPTADO'; break;
+        case '2': echo 'ANULADO'; break;
+        case '3': echo 'AUTORIZADO'; break;
+        case '4': echo 'NO AUTORIZADO'; break;
+    }
+
+    echo PHP_EOL.'Estado RUC: '.$data->getEstadoRuc();
+    echo PHP_EOL.'Condicion RUC: '.$data->getCondDomiRuc();
+
+} catch (Exception $e) {
+    echo 'Excepcion cuando invocaba ConsultaApi->consultarCpe: ', $e->getMessage(), PHP_EOL;
+}
+```
+
+## Tabla de códigos
+
+Tipo de comprobante
+
+|Código | Descripción                |
+|-------|----------------------------|
+|01     | Factura                    |
+|03     | Boleta de venta            |
+|04     | Liquidación de compra      |
+|07     | Nota de crédito            |
+|08     | Nota de débito             |
+|R1     | Recibo por honorarios      |
+|R7     | Nota de crédito de recibos |
+
+Estado del comprobante (`$data->getEstadoCp`)
+
+Código | Descripción                           |
+-------|---------------------------------------|
+0 | NO EXISTE (Comprobante no informado) |
+1 | ACEPTADO (Comprobante aceptado) |
+2 | ANULADO (Comunicado en una baja) |
+3 | AUTORIZADO (con autorización de imprenta) |
+4 | NO AUTORIZADO (no autorizado por imprenta) |
+ 
+Estado del contribuyente (`$data->getEstadoRuc`)
+
+Código | Descripción                           |
+-------|---------------------------------------|
+00 | ACTIVO
+01 | BAJA PROVISIONAL
+02 | BAJA PROV. POR OFICIO
+03 | SUSPENSION TEMPORAL
+10 | BAJA DEFINITIVA
+11 | BAJA DE OFICIO
+22 | INHABILITADO-VENT.UNICA
+
+Condición de Domicilio del Contribuyente (`$data->getCondDomiRuc`)
+
+Código | Descripción                           |
+-------|---------------------------------------|
+00 | HABIDO
+09 | PENDIENTE
+11 | POR VERIFICAR
+12 | NO HABIDO
+20 | NO HALLADO
+
+## Docs Models
 
  - [ApiToken](docs/Model/ApiToken.md)
  - [CpeFilter](docs/Model/CpeFilter.md)
