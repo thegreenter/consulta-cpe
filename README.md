@@ -1,6 +1,6 @@
 # Consulta Integrada CPE
 
-CONSULTA INTEGRADA DE COMPROBANTE DE PAGO.
+PHP Client para API de [CONSULTA INTEGRADA DE COMPROBANTE DE PAGO](https://orientacion.sunat.gob.pe/images/imagenes/contenido/comprobantes/Manual-de-Consulta-Integrada-de-Comprobante-de-Pago-por-ServicioWEB.pdf) expuesta por SUNAT. 
 
 ## Requerimientos
 
