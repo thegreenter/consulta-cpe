@@ -11,6 +11,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * ConsultaApiTest
+ * @group manual
  */
 class ConsultaApiTest extends TestCase
 {
