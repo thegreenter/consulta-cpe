@@ -27,7 +27,7 @@ class CpeStatus implements ModelInterface, ArrayAccess
     protected static $openAPITypes = [
         'estado_cp' => 'string',
         'estado_ruc' => 'string',
-        'cond_domi_ruc' => 'bool',
+        'cond_domi_ruc' => 'string',
         'observaciones' => 'string[]'
     ];
 
@@ -241,7 +241,7 @@ class CpeStatus implements ModelInterface, ArrayAccess
     /**
      * Gets cond_domi_ruc
      *
-     * @return bool|null
+     * @return string|null
      */
     public function getCondDomiRuc()
     {
@@ -251,7 +251,7 @@ class CpeStatus implements ModelInterface, ArrayAccess
     /**
      * Sets cond_domi_ruc
      *
-     * @param bool|null $cond_domi_ruc Condición Domiciliaria del Contribuyente
+     * @param string|null $cond_domi_ruc Condición Domiciliaria del Contribuyente
      *
      * @return $this
      */
