@@ -73,7 +73,7 @@ class CpeStatus implements ModelInterface, ArrayAccess
         'estado_cp' => 'estadoCp',
         'estado_ruc' => 'estadoRuc',
         'cond_domi_ruc' => 'condDomiRuc',
-        'observaciones' => 'Observaciones'
+        'observaciones' => 'observaciones'
     ];
 
     /**
