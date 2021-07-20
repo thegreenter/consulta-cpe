@@ -2,7 +2,7 @@
 
 ![CI](https://github.com/thegreenter/consulta-cpe/workflows/CI/badge.svg)
 
-PHP Client para API de [CONSULTA INTEGRADA DE COMPROBANTE DE PAGO](https://orientacion.sunat.gob.pe/images/imagenes/contenido/comprobantes/Manual-de-Consulta-Integrada-de-Comprobante-de-Pago-por-ServicioWEB.pdf) expuesta por SUNAT. 
+PHP Client para API de [CONSULTA INTEGRADA DE COMPROBANTE DE PAGO](https://cdn.www.gob.pe/uploads/document/file/536289/Manual_de_Consulta_Integrada_de_Validez_de_CdP_por_Servicio_WEB.pdf) expuesta por SUNAT. 
 
 ## Requerimientos
 
