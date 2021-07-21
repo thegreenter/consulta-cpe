@@ -62,8 +62,9 @@ $apiInstance = new \Greenter\Sunat\ConsultaCpe\Api\ConsultaApi(
     $config->setHost($config->getHostFromSettings(1))
 );
 $ruc = '20000000001'; // RUC de quién realiza la consulta
+
 $cpeFilter = (new \Greenter\Sunat\ConsultaCpe\Model\CpeFilter())
-            ->setNumRuc($ruc)
+            ->setNumRuc('20000000001') // RUC del emisor
             ->setCodComp('01') // Tipo de comprobante
             ->setNumeroSerie('F001')
             ->setNumero('1')
