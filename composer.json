@@ -18,8 +18,7 @@
         "php": ">=7.1",
         "ext-curl": "*",
         "ext-json": "*",
-        "ext-mbstring": "*",
-        "guzzlehttp/guzzle": "^6.2"
+        "guzzlehttp/guzzle": "^6.2 || ^7.3"
     },
     "require-dev": {
         "phpunit/phpunit": "^7.4",
@@ -30,5 +29,8 @@
     },
     "autoload-dev": {
         "psr-4": { "Tests\\Greenter\\Sunat\\ConsultaCpe\\" : "tests/" }
+    },
+    "suggest": {
+        "ext-mbstring": "guzzle ^6, phpunit required"
     }
 }

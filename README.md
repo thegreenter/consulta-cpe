@@ -62,8 +62,9 @@ $apiInstance = new \Greenter\Sunat\ConsultaCpe\Api\ConsultaApi(
     $config->setHost($config->getHostFromSettings(1))
 );
 $ruc = '20000000001'; // RUC de quién realiza la consulta
+
 $cpeFilter = (new \Greenter\Sunat\ConsultaCpe\Model\CpeFilter())
-            ->setNumRuc($ruc)
+            ->setNumRuc('20000000001') // RUC del emisor
             ->setCodComp('01') // Tipo de comprobante
             ->setNumeroSerie('F001')
             ->setNumero('1')
@@ -139,6 +140,10 @@ Código | Descripción                           |
 11 | POR VERIFICAR
 12 | NO HABIDO
 20 | NO HALLADO
+
+## FAQ
+- *¿Puedo consultar los comprobantes de cualquier RUC con el mismo `client_id`?*   
+    Solo se pueden consultar los comprobantes en donde el RUC que generó el `client_id`, fue emisor o receptor. 
 
 ## Docs Models
 

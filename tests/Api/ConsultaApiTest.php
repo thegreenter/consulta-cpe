@@ -26,6 +26,7 @@ class ConsultaApiTest extends TestCase
         $client = new Client();
         $apiInstance = new AuthApi($client);
 
+        $rucAuth = '20123456789';
         $result = $apiInstance->getToken(
             'client_credentials',
             'https://api.sunat.gob.pe/v1/contribuyente/contribuyentes',
@@ -41,17 +42,16 @@ class ConsultaApiTest extends TestCase
             $config->setHost($config->getHostFromSettings(1))
         );
 
-        $ruc = '20123456789';
         $filter = new CpeFilter();
         $filter
-            ->setNumRuc($ruc)
+            ->setNumRuc('20123456789')
             ->setCodComp('01')
             ->setNumeroSerie('E001')
             ->setNumero('5')
             ->setFechaEmision('20/10/2020')
             ->setMonto('100.00');
 
-        $result = $cpeInstance->consultarCpe($ruc, $filter);
+        $result = $cpeInstance->consultarCpe($rucAuth, $filter);
 
         $this->assertTrue($result->getSuccess());
 
