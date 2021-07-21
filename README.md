@@ -141,6 +141,10 @@ Código | Descripción                           |
 12 | NO HABIDO
 20 | NO HALLADO
 
+## FAQ
+- *¿Puedo consultar los comprobantes de cualquier RUC con el mismo `client_id`?*   
+    Solo se pueden consultar los comprobantes en donde el RUC que generó el `client_id`, fue emisor o receptor. 
+
 ## Docs Models
 
  - [ApiToken](docs/Model/ApiToken.md)
